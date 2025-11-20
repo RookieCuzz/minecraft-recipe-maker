@@ -23,10 +23,10 @@
       </div>
 
       <!-- 工作台合成区域 -->
-      <div v-if="recipeType === 'crafting'" class="crafting-area">
+      <div v-if="recipeType === 'crafting'" class="crafting-area" ref="craftingArea">
         <div class="crafting-grid-container">
           <h3>配方输入</h3>
-          <div class="crafting-grid" :class="'grid-' + gridSize" ref="craftingGrid">
+          <div class="crafting-grid" :class="'grid-' + gridSize">
             <div 
               v-for="i in gridSize * gridSize" 
               :key="i"
@@ -76,8 +76,8 @@
       </div>
 
       <!-- 熔炉合成区域 -->
-      <div v-else class="furnace-area">
-        <div class="furnace-container" ref="furnaceGrid">
+      <div v-else class="furnace-area" ref="furnaceArea">
+        <div class="furnace-container">
           <div class="furnace-input">
             <h3>原材料</h3>
             <div class="furnace-slot" @drop="handleImageDrop($event, null, 'furnace-input')" @dragover="handleDragOver">
@@ -133,8 +133,8 @@ export default {
     const furnaceInput = ref({ text: '', image: null })
     const furnaceOutput = ref({ text: '', image: null })
     const showJSON = ref(false)
-    const craftingGrid = ref(null)
-    const furnaceGrid = ref(null)
+    const craftingArea = ref(null)
+    const furnaceArea = ref(null)
 
     const selectSlot = (index) => {
       selectedSlot.value = index
@@ -232,12 +232,12 @@ export default {
     })
 
     const exportAsImage = async () => {
-      const element = recipeType.value === 'crafting' ? craftingGrid.value : furnaceGrid.value
+      const element = recipeType.value === 'crafting' ? craftingArea.value : furnaceArea.value
       if (!element) return
 
       try {
         const canvas = await html2canvas(element, {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#f8f9fa',
           scale: 2
         })
         
@@ -270,8 +270,8 @@ export default {
       furnaceInput,
       furnaceOutput,
       showJSON,
-      craftingGrid,
-      furnaceGrid,
+      craftingArea,
+      furnaceArea,
       recipeJSON,
       selectSlot,
       clearRecipe,
