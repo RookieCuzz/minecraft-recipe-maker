@@ -12,22 +12,25 @@ if [ ! -d "node_modules" ]; then
     echo ""
 fi
 
-# 确保 vite 可执行
-chmod +x node_modules/.bin/vite 2>/dev/null
-
-nohup npm run dev > server.log 2>&1 &
+# 直接使用 npx 运行 vite
+echo "启动服务器..."
+nohup npx vite --host 0.0.0.0 > server.log 2>&1 &
 
 PID=$!
 echo $PID > server.pid
 
-sleep 2
+sleep 3
 
 if ps -p $PID > /dev/null; then
     echo "服务器已在后台启动！"
     echo "进程 ID: $PID"
     echo "日志文件: server.log"
-    echo "访问地址: http://localhost:5173/recipe2png/"
+    echo "本地访问: http://localhost:5173/recipe2png/"
+    echo "网络访问: http://$(hostname -I | awk '{print $1}'):5173/recipe2png/"
+    echo ""
+    echo "查看日志: tail -f server.log"
 else
     echo "服务器启动失败，请查看 server.log"
+    cat server.log
     exit 1
 fi
