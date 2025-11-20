@@ -5,6 +5,16 @@ echo ""
 
 cd "$(dirname "$0")"
 
+# 检查 node_modules 是否存在
+if [ ! -d "node_modules" ]; then
+    echo "未找到 node_modules，正在安装依赖..."
+    npm install
+    echo ""
+fi
+
+# 确保 vite 可执行
+chmod +x node_modules/.bin/vite 2>/dev/null
+
 nohup npm run dev > server.log 2>&1 &
 
 PID=$!
